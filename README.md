@@ -1,10 +1,6 @@
 # Project 1
 
 Web Programming with Python and JavaScript
-<<<<<<< HEAD
-=======
-Añadiendo lineas
->>>>>>> 9aa6df8469d325cdfabc0c2de625e0add5d4fad2
 
 Database Credentials
 
