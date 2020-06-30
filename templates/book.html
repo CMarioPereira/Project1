@@ -15,38 +15,36 @@
 
 {% block body %}
 <div class="container">
-    <h1>Cien Años de Soledad</h1>
+    <h1>{{ book.title }}</h1>
 
     <table>
       <tr>
-        <th>Author:</th>
-        <td>Gabriel García Marquez</td>
+        <th>Author:</th> <td>{{ book.author }}</td>
       </tr>
       <tr>
-        <th>Year:</th>
-        <td>1996</td>
+        <th>Year:</th> <td>{{ book.year }}</td>
       </tr>
       <tr>
-        <th>ISBN:</th>
-        <td>84758392729</td>
+        <th>ISBN:</th> <td>{{ book.isbn }}</td>
       </tr>
       <tr>
-        <th>Rating:</th>
-        <td>4</td>
+        <th>Rating:</th> <td>{{ book.stars }}</td>
       </tr>
       <tr>
-        <th>Reviews:&nbsp &nbsp</th>
-        <td>23</td>
+        <th>Reviews:&nbsp &nbsp</th> <td>{{ book.review_count }}</td>
       </tr>
     </table>
 
     <span class="heading">User Rating</span>
+  {% for i in range(stars) %}
     <span class="fa fa-star checked"></span>
-    <span class="fa fa-star checked"></span>
-    <span class="fa fa-star checked"></span>
-    <span class="fa fa-star checked"></span>
-    <span class="fa fa-star"></span>
-    <p>4.1 average based on 254 reviews. Data obtained from
+  {% endfor %}
+  {% if stars != 5 %}
+    {% for i in range(5-stars) %}
+      <span class="fa fa-star"></span>
+    {% endfor %}
+  {% endif %}
+    <p>  {{ good_reads['average_rating'] }} average based on {{ good_reads['reviews_count'] }} reviews. Data obtained from
       <a href="https://www.goodreads.com/">Good Reads</a>.</p>
     <hr style="border:3px solid #f1f1f1">
 
@@ -69,15 +67,15 @@
         <label class="form-check-label" for="inlineRadio2">2</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option2">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
         <label class="form-check-label" for="inlineRadio2">3</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option2">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4">
         <label class="form-check-label" for="inlineRadio2">4</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option2">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option5">
         <label class="form-check-label" for="inlineRadio2">5</label>
       </div>
       <button type="submit" class="btn btn-dark">Submit</button>
@@ -85,35 +83,22 @@
 
     </form>
 
+  {% if reviews != [] %}
     <h4>Reviews</h4>
+    {% for review in reviews %}
     <div class="review">
       <div class="row">
           <div class="col-6">
-              <h6>@camilo34:</h6>
+              <h6>@{{ review.user_id }}:</h6>
           </div>
           <div class="col-6" id="data">
-              03-01-2020
+              {{ review.date }}
           </div>
       </div>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id fermentum elit. Aenean ornare porta sagittis.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id fermentum elit. Aenean ornare porta sagittis.
-        A. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id fermentum elit. Aenean ornare porta sagittis.
-        A. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id fermentum elit. Aenean ornare porta sagittis.
-        A. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id fermentum elit. Aenean ornare porta sagittis.
-        A. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id fermentum elit. Aenean ornare porta sagittis.
-      </p>
+      <p> {{ review.text }} </p>
     </div>
-
-    <div class="review">
-      <h6>@DannaLoreto:</h6>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id fermentum elit. Aenean ornare porta sagittis.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id fermentum elit. Aenean ornare porta sagittis.
-        A. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id fermentum elit. Aenean ornare porta sagittis.
-        A. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id fermentum elit. Aenean ornare porta sagittis.
-      </p>
-    </div>
+    {% endfor %}
+  {% endif %}
 
 </div>
 
