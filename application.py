@@ -1,6 +1,7 @@
 import os
+import requests
 
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, jsonify, redirect
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -20,14 +21,21 @@ Session(app)
 #engine = create_engine(os.getenv("DATABASE_URL"))
 engine = create_engine("postgres://pzbwwiazhlckur:9376f8c09de4c84eff9d268156336408ef864152e97e99ce89d49163dc087580@ec2-52-44-166-58.compute-1.amazonaws.com:5432/d8iug83ch38piq")
 db = scoped_session(sessionmaker(bind=engine))
-
+user = None
+review = None
 
 @app.route("/")
-def index():
+def login():
     return render_template("login.html")
 
-@app.route("/signin", methods=["POST"])
-def signin():
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect('/')
+
+@app.route("/account/<int:status>", methods=["POST"])
+def account(status):
+    if status==0:
         username = request.form.get("username")
         password = request.form.get("password")
         if db.execute("SELECT * FROM users WHERE (username = :user AND password = :pw)", {"user": username, "pw": password}).rowcount == 0:
@@ -35,7 +43,12 @@ def signin():
         else:
             user = db.execute("SELECT * FROM users WHERE (username = :user)", {"user": username})
             review = db.execute("SELECT * FROM reviews WHERE user_id IN (SELECT id FROM users WHERE (username = :user) ORDER BY date DESC)",{"user":username}).fetchone()
-            return render_template("user.html", user=user, review=review)
+            return render_template("user.html", review=review, status=0, user=user)
+    elif status==1:
+        search = request.form.get("search")
+        text = '%' + search.capitalize() + '%'
+        books = db.execute("SELECT * FROM books WHERE ((ISBN LIKE :text) OR (title LIKE :text) OR (author LIKE :text))",{"text": text}).fetchall()
+        return render_template("user.html", status=1, books=books, review=None)
 
 @app.route("/registration")
 def registration():
@@ -56,10 +69,30 @@ def signup():
         db.commit()
         return render_template("success.html")
 
-@app.route("/user")
-def user():
-    return render_template("user.html")
+@app.route("/account/book/<string:ISBN>")
+def book(ISBN):
+    book = db.execute("SELECT * FROM books WHERE ISBN = :isbn", {"isbn": ISBN}).fetchone()
+    reviews = db.execute("SELECT * FROM reviews WHERE book_id = :isbn", {"isbn": ISBN}).fetchall()
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "bTGMYyGXxoJ4dyQANv0A", "isbns": ISBN})
+    book_gr = res.json()
+    good_reads = book_gr['books']
+    gr = good_reads[0]
+    stars = int(gr['average_rating'][0])
+    return render_template("book.html", book=book, reviews=reviews, good_reads=good_reads[0], stars=stars)
 
-@app.route("/user/book")
-def book():
-    return render_template("book.html")
+@app.route("/api/<string:ISBN>")
+def book_api(ISBN):
+
+    # Make sure book exists.
+    book = db.execute("SELECT * FROM books WHERE ISBN = :isbn", {"isbn": ISBN}).fetchone()
+    if book is None:
+        return jsonify({"error": "Invalid ISBN"}), 422
+
+    return jsonify({
+            "ISBN": book.isbn,
+            "title": book.title,
+            "author": book.author,
+            "year": book.year,
+            "stars": book.stars,
+            "review_count": book.review_count
+        })
