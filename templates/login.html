@@ -10,6 +10,10 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
 {% endblock %}
 
+{% block bottom %}
+<a href="{{ url_for('login') }}">Log in</a>      
+{% endblock %}
+
 {% block body %}
 <div class="d-flex justify-content-center h-100">
   <div class="card" id="login_card">
@@ -30,7 +34,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text"><i class="fas fa-key"></i></span>
           </div>
-          <input type="password" class="form-control" name="password" placeholder="password">
+          <input type="password" class="form-control" name="password" placeholder="password" required>
         </div>
 
         {% if message == "Error" %}
