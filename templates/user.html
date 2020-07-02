@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block bottom %}
-  <button type="button" class="btn btn-warning" href="{{ url_for('logout') }}">Logout</button>
+  <button type="button" class="btn btn-warning"><a id ="logout" href="{{ url_for('logout') }}">Log out</a></button>
 {% endblock %}
 
 {% block body %}
@@ -30,7 +30,7 @@
           </div>
           <input class="form-control my-0 py-1" type="text" name="search" placeholder="Introduce the title, author or ISBN of the book" aria-label="Search">
           <div class="input-group-append">
-            <button class="btn btn-secondary" type="button">Search</button>
+            <button class="btn btn-secondary" type="submit">Search</button>
           </div>
         </div>
       </form>
@@ -40,20 +40,22 @@
   {% if books == [] and status == 1 %}
     <p>There are not results for you searching</P>
   {% elif books != [] and status == 1 %}
-    <table>
+    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+      <table class="table table-bordered table-striped mb-0">
       {% for book in books %}
-        <tr>
-          <td>
-            <a href="{{ url_for('book', ISBN=book.isbn, status=0) }}">
+        <tr id="tr">
+          <td id="td">
+            <a id="other" href="{{ url_for('book', ISBN=book.isbn, status=0) }}">
               {{ book.title }} - {{ book.author }}
             </a>
           </td>
-          <td>
-            <a href="{{ url_for('book', ISBN=book.isbn, status=0) }}"> &nbsp &nbsp {{ book.isbn }} </a>
+          <td id="td">
+            <a id="other" href="{{ url_for('book', ISBN=book.isbn, status=0) }}"> &nbsp &nbsp {{ book.isbn }} </a>
           </td>
         </tr>
       {% endfor %}
-    </table>
+      </table>
+    </div>
   {% endif %}
   </div>
 

@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block bottom %}
-  <button type="button" class="btn btn-warning">Logout</button>
+  <button type="button" class="btn btn-warning"><a id ="logout" href="{{ url_for('logout') }}">Log out</a></button>
 {% endblock %}
 
 {% block body %}
@@ -45,7 +45,7 @@
     {% endfor %}
   {% endif %}
     <p>  {{ good_reads['average_rating'] }} average based on {{ good_reads['reviews_count'] }} reviews. Data obtained from
-      <a href="https://www.goodreads.com/">Good Reads</a>.</p>
+      <a id="other" href="https://www.goodreads.com/">Good Reads</a>.</p>
     <hr style="border:3px solid #f1f1f1">
 
   {% if user_review == 0 %}
