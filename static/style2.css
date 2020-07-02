@@ -35,9 +35,9 @@ p {
 	color: white;
 	font-weight: bold;
 	font-size: 30px;
-	padding-top: 85px;
-	height: 200px;
-	margin-right: 30px;
+	padding-top: 75px;
+	height: 180px;
+	margin-right: 20px;
 }
 
 #data {
@@ -49,8 +49,10 @@ p {
 }
 
 #lastReview {
-	bottom: 15px;
 	position: fixed;
+	bottom: 15px;
+	height: 230px;
+	width: 82%;
 }
 
 #basic-text1 { background-color: rgba(0,0,0,0.5);}
@@ -62,10 +64,30 @@ p {
 
 .checked { color: orange; }
 
+#logout {
+	color: black;
+  font-weight:normal;
+	text-decoration: none;
+}
 
-a {
+#logout:hover {
+	color: black;
+	text-decoration: none;
+}
+
+#other {
+	color: black;
   font-weight: bold;
 	text-decoration: none;
+}
+
+#other:hover {
+	color: orange;
+	text-decoration: none;
+}
+
+#tr {
+	background-color: white;
 }
 
 a:visited {
@@ -73,7 +95,11 @@ a:visited {
 	text-decoration: none;
 }
 
-a:hover {
-	color: orange;
-	text-decoration: none;
+.my-custom-scrollbar {
+	position: relative;
+	height: 200px;
+	overflow: auto;
+}
+.table-wrapper-scroll-y {
+	display: block;
 }

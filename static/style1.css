@@ -84,3 +84,18 @@ color: red;
 #success {
 color: white;
 }
+
+#login {
+	color: black;
+	text-decoration: none;
+}
+
+#login:visited {
+	color: black;
+	text-decoration: none;
+}
+
+#login:hover {
+	color: black;
+	text-decoration: none;
+}
